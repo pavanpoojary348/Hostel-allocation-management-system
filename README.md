@@ -88,11 +88,6 @@ npm start
 
 ---
 
-## 📸 Screenshots
-
-(Add screenshots here later)
-
----
 
 ## 🎯 Future Enhancements
 
