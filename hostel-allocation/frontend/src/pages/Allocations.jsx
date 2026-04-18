@@ -5,8 +5,9 @@ export default function Allocations() {
   const [allocations, setAllocations] = useState([]);
   const [students, setStudents] = useState([]);
   const [rooms, setRooms] = useState([]);
-const [form, setForm] = useState({ student_id:'1', room_id:'1' });
+  const [form, setForm] = useState({ student_id:'1', room_id:'1' });
   const [msg, setMsg] = useState('');
+  const [search, setSearch] = useState('');
 
   const fetchAll = () => {
     axios.get('http://localhost:5000/api/allocations').then(res => setAllocations(res.data));
@@ -16,32 +17,56 @@ const [form, setForm] = useState({ student_id:'1', room_id:'1' });
 
   useEffect(() => { fetchAll(); }, []);
 
- const handleAllocate = async () => {
-  if (!form.student_id || !form.room_id) {
-    setMsg('Please select both student and room!');
-    return;
-  }
-  try {
-    await axios.post('http://localhost:5000/api/allocations', form);
-    setMsg('Room allocated successfully!');
-    setForm({ student_id:'', room_id:'' });
-    fetchAll();
-  } catch(err) {
-    setMsg('Error: ' + err.response?.data?.message || 'Something went wrong');
-  }
-};
+  const handleAllocate = async () => {
+    if (!form.student_id || !form.room_id) {
+      setMsg('Please select both student and room!');
+      return;
+    }
+    try {
+      await axios.post('http://localhost:5000/api/allocations', form);
+      setMsg('Room allocated successfully!');
+      setForm({ student_id:'1', room_id:'1' });
+      fetchAll();
+    } catch(err) {
+      setMsg('Error: ' + err.response?.data?.message || 'Something went wrong');
+    }
+  };
+
+  const handleAutoAllocate = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/api/allocations/auto-allocate');
+      setMsg(res.data.message);
+      fetchAll();
+    } catch(err) {
+      setMsg('Error: ' + err.response?.data?.message);
+    }
+  };
+
+  const filteredStudents = students.filter(s =>
+    search === '' || 
+    (s.usn && s.usn.toLowerCase().includes(search.toLowerCase())) ||
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="page">
       <h2>Allocations</h2>
       <div className="card">
         <h3 style={{marginBottom:'1rem'}}>Allocate Room</h3>
+        <input
+          placeholder="Search student by USN or name..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{marginBottom:'1rem'}}
+        />
         <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
           <select value={form.student_id}
             onChange={e => setForm({...form, student_id:e.target.value})}>
             <option value="">Select Student</option>
-            {students.map(s => (
-              <option key={s.student_id} value={s.student_id}>{s.name}</option>
+            {filteredStudents.map(s => (
+              <option key={s.student_id} value={s.student_id}>
+                {s.name} {s.usn ? `- ${s.usn}` : ''}
+              </option>
             ))}
           </select>
           <select value={form.room_id}
@@ -54,24 +79,31 @@ const [form, setForm] = useState({ student_id:'1', room_id:'1' });
             ))}
           </select>
         </div>
-        <button onClick={handleAllocate}>Allocate Room</button>
+        <div style={{display:'flex', gap:'1rem', marginTop:'0.5rem'}}>
+          <button onClick={handleAllocate}>Allocate Room</button>
+          <button onClick={handleAutoAllocate}
+            style={{background:'#1a1a2e'}}>
+            ⚡ Auto Allocate All
+          </button>
+        </div>
         {msg && <p className="success">{msg}</p>}
       </div>
 
       <table>
         <thead>
           <tr>
-            <th>ID</th><th>Student</th><th>Room</th><th>Floor</th><th>Status</th>
+            <th>ID</th><th>Student</th><th>USN</th><th>Room</th><th>Floor</th><th>Status</th>
           </tr>
         </thead>
         <tbody>
           {allocations.length === 0 ? (
-            <tr><td colSpan="5" style={{textAlign:'center', color:'#666'}}>No allocations yet</td></tr>
+            <tr><td colSpan="6" style={{textAlign:'center', color:'#666'}}>No allocations yet</td></tr>
           ) : (
             allocations.map(a => (
               <tr key={a.allocation_id}>
                 <td>{a.allocation_id}</td>
                 <td>{a.name}</td>
+                <td>{a.usn || '-'}</td>
                 <td>Room {a.room_id}</td>
                 <td>Floor {a.floor}</td>
                 <td><span className="badge badge-green">{a.status}</span></td>

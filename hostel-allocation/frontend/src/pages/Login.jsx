@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -35,6 +36,9 @@ export default function Login() {
         <p style={{marginTop:'1rem', textAlign:'center', color:'#666', fontSize:'13px'}}>
           Username: admin &nbsp;|&nbsp; Password: admin123
         </p>
+             <p style={{marginTop:'1rem', textAlign:'center', fontSize:'13px'}}>
+  Student? <Link to="/student-login" style={{color:'#e94560'}}>Student Login</Link>
+</p>
       </div>
     </div>
   );

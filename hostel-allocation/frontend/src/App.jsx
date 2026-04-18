@@ -1,9 +1,13 @@
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Students from './pages/Students';
 import Rooms from './pages/Rooms';
 import Allocations from './pages/Allocations';
+import StudentLogin from './pages/StudentLogin';
+import StudentRegister from './pages/StudentRegister';
+import StudentDashboard from './pages/StudentDashboard';
 
 function Navbar() {
   return (
@@ -26,6 +30,9 @@ export default function App() {
         <Route path="/students" element={<><Navbar /><Students /></>} />
         <Route path="/rooms" element={<><Navbar /><Rooms /></>} />
         <Route path="/allocations" element={<><Navbar /><Allocations /></>} />
+        <Route path="/student-login" element={<StudentLogin />} />
+        <Route path="/student-register" element={<StudentRegister />} />
+        <Route path="/student-dashboard" element={<StudentDashboard />} />
       </Routes>
     </BrowserRouter>
   );
