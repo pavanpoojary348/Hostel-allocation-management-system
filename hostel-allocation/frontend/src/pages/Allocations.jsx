@@ -42,8 +42,15 @@ export default function Allocations() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Cancel this allocation?')) return;
+    await axios.delete(`http://localhost:5000/api/allocations/${id}`);
+    setMsg('Allocation cancelled!');
+    fetchAll();
+  };
+
   const filteredStudents = students.filter(s =>
-    search === '' || 
+    search === '' ||
     (s.usn && s.usn.toLowerCase().includes(search.toLowerCase())) ||
     s.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -81,8 +88,7 @@ export default function Allocations() {
         </div>
         <div style={{display:'flex', gap:'1rem', marginTop:'0.5rem'}}>
           <button onClick={handleAllocate}>Allocate Room</button>
-          <button onClick={handleAutoAllocate}
-            style={{background:'#1a1a2e'}}>
+          <button onClick={handleAutoAllocate} style={{background:'#1a1a2e'}}>
             ⚡ Auto Allocate All
           </button>
         </div>
@@ -92,12 +98,12 @@ export default function Allocations() {
       <table>
         <thead>
           <tr>
-            <th>ID</th><th>Student</th><th>USN</th><th>Room</th><th>Floor</th><th>Status</th>
+            <th>ID</th><th>Student</th><th>USN</th><th>Room</th><th>Floor</th><th>Price</th><th>Date</th><th>Status</th><th>Action</th>
           </tr>
         </thead>
         <tbody>
           {allocations.length === 0 ? (
-            <tr><td colSpan="6" style={{textAlign:'center', color:'#666'}}>No allocations yet</td></tr>
+            <tr><td colSpan="9" style={{textAlign:'center', color:'#666'}}>No allocations yet</td></tr>
           ) : (
             allocations.map(a => (
               <tr key={a.allocation_id}>
@@ -106,7 +112,15 @@ export default function Allocations() {
                 <td>{a.usn || '-'}</td>
                 <td>Room {a.room_id}</td>
                 <td>Floor {a.floor}</td>
+                <td>₹{a.price}</td>
+                <td>{new Date(a.allocation_date).toLocaleDateString()}</td>
                 <td><span className="badge badge-green">{a.status}</span></td>
+                <td>
+                  <button onClick={() => handleDelete(a.allocation_id)}
+                    style={{background:'#e74c3c', padding:'4px 12px', fontSize:'12px'}}>
+                    Cancel
+                  </button>
+                </td>
               </tr>
             ))
           )}

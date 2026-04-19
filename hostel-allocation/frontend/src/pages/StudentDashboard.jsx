@@ -20,7 +20,6 @@ export default function StudentDashboard() {
     axios.get(`http://localhost:5000/api/notifications/${s.student_id}`)
       .then(res => {
         setNotifications(res.data);
-        // mark all as read
         axios.put(`http://localhost:5000/api/notifications/read/${s.student_id}`);
       })
       .catch(() => setNotifications([]));
@@ -43,11 +42,16 @@ export default function StudentDashboard() {
         </span>
         <span style={{color:'#fff', marginRight:'1rem'}}>👋 {student.name}</span>
         {unread > 0 && (
-          <span style={{background:'#e94560', color:'#fff', borderRadius:'50%', 
+          <span style={{background:'#e94560', color:'#fff', borderRadius:'50%',
             padding:'2px 8px', fontSize:'12px', marginRight:'1rem'}}>
             {unread} new
           </span>
         )}
+        <button onClick={() => navigate('/student-profile')}
+          style={{background:'transparent', border:'1px solid #fff', color:'#fff',
+            padding:'5px 16px', borderRadius:'6px', marginRight:'1rem'}}>
+          👤 Profile
+        </button>
         <button onClick={handleLogout} style={{background:'#e94560', padding:'6px 16px'}}>Logout</button>
       </nav>
 

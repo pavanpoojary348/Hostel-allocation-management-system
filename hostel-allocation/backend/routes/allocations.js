@@ -4,10 +4,12 @@ const db = require('../db');
 
 router.get('/', (req, res) => {
   db.query(
-    `SELECT a.allocation_id, s.name, s.usn, r.room_id, r.floor, a.status
+    `SELECT a.allocation_id, s.name, s.usn, r.room_id, r.floor, r.price,
+     a.status, a.allocation_date
      FROM Allocations a
      JOIN Students s ON a.student_id = s.student_id
-     JOIN Rooms r ON a.room_id = r.room_id`,
+     JOIN Rooms r ON a.room_id = r.room_id
+     ORDER BY a.allocation_date DESC`,
     (err, rows) => {
       if (err) return res.status(500).json(err);
       res.json(rows);
@@ -98,5 +100,16 @@ router.post('/auto-allocate', (req, res) => {
     }
   );
 });
-
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('SELECT room_id FROM Allocations WHERE allocation_id=?', [id], (err, rows) => {
+    if (err || rows.length === 0) return res.status(404).json({ message: 'Not found' });
+    const room_id = rows[0].room_id;
+    db.query('DELETE FROM Allocations WHERE allocation_id=?', [id], (err2) => {
+      if (err2) return res.status(500).json({ message: err2.message });
+      db.query('UPDATE Rooms SET availability_status="Available" WHERE room_id=?', [room_id]);
+      res.json({ message: 'Allocation cancelled' });
+    });
+  });
+});
 module.exports = router;

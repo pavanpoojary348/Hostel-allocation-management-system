@@ -171,3 +171,56 @@ button:hover {
 
 .badge-green { background: #e6f9f0; color: #27ae60; }
 .badge-red { background: #fdecea; color: #e74c3c; }
+body.dark table {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+body.dark td {
+  color: #ccc;
+  border-bottom: 1px solid #333;
+}
+
+body.dark tr:hover td {
+  background: #16213e;
+}
+
+body.dark .card {
+  background: #16213e;
+  color: #fff;
+}
+
+body.dark .stat-card {
+  background: #16213e;
+  color: #fff;
+}
+
+body.dark input, body.dark select {
+  background: #16213e;
+  color: #fff;
+  border-color: #444;
+}
+body.dark h2, body.dark h3, body.dark p, body.dark td, body.dark th {
+  color: #e0e0e0;
+}
+
+body.dark .stat-card p {
+  color: #aaa;
+}
+
+body.dark .page h2 {
+  color: #fff;
+}
+
+body.dark .login-box {
+  background: #16213e;
+  color: #fff;
+}
+
+body.dark .login-box p, body.dark .login-box input {
+  color: #ccc;
+}
+
+body.dark nav a {
+  color: #ccc;
+}

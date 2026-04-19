@@ -41,5 +41,26 @@ router.post('/preferences', (req, res) => {
     }
   );
 });
-
+router.put('/:id', (req, res) => {
+  const { name, mobile, branch, semester, year } = req.body;
+  db.query(
+    'UPDATE Students SET name=?, mobile=?, branch=?, semester=?, year=? WHERE student_id=?',
+    [name, mobile, branch, semester, year, req.params.id],
+    (err) => {
+      if (err) return res.status(500).json({ message: err.message });
+      res.json({ message: 'Profile updated' });
+    }
+  );
+});
+router.put('/:id', (req, res) => {
+  const { name, mobile, branch, semester, year } = req.body;
+  db.query(
+    'UPDATE Students SET name=?, mobile=?, branch=?, semester=?, year=? WHERE student_id=?',
+    [name, mobile, branch, semester, year, req.params.id],
+    (err) => {
+      if (err) return res.status(500).json({ message: err.message });
+      res.json({ message: 'Profile updated' });
+    }
+  );
+});
 module.exports = router;
