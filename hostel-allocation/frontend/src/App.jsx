@@ -11,7 +11,8 @@ import StudentRegister from './pages/StudentRegister';
 import StudentDashboard from './pages/StudentDashboard';
 import ERDiagram from './pages/ERDiagram';
 import StudentProfile from './pages/Profile';
-
+import ForgotPassword from './pages/ForgotPassword';
+import Waitlist from './pages/Waitlist';
 function Navbar() {
   const [dark, setDark] = useState(localStorage.getItem('theme') === 'dark');
 
@@ -30,6 +31,7 @@ function Navbar() {
       <Link to="/rooms">Rooms</Link>
       <Link to="/allocations">Allocations</Link>
       <Link to="/er-diagram">ER Diagram</Link>
+      <Link to="/waitlist">Waitlist</Link>
       <button onClick={() => setDark(!dark)}
         style={{background:'transparent', border:'1px solid #fff',
           color:'#fff', padding:'5px 12px', borderRadius:'20px', fontSize:'13px', marginLeft:'auto'}}>
@@ -53,6 +55,9 @@ export default function App() {
         <Route path="/student-register" element={<StudentRegister />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/student-profile" element={<StudentProfile />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/waitlist" element={<><Navbar /><Waitlist /></>} />
+
       </Routes>
     </BrowserRouter>
   );

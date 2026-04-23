@@ -62,5 +62,20 @@ router.put('/:id', (req, res) => {
       res.json({ message: 'Profile updated' });
     }
   );
+});router.post('/verify', (req, res) => {
+  const { usn, mobile } = req.body;
+  db.query('SELECT * FROM Students WHERE usn=? AND mobile=?', [usn, mobile], (err, rows) => {
+    if (err) return res.status(500).json({ message: err.message });
+    if (rows.length === 0) return res.status(401).json({ message: 'USN or mobile not found' });
+    res.json({ verified: true });
+  });
+});
+
+router.post('/reset-password', (req, res) => {
+  const { usn, newPassword } = req.body;
+  db.query('UPDATE Students SET password=? WHERE usn=?', [newPassword, usn], (err) => {
+    if (err) return res.status(500).json({ message: err.message });
+    res.json({ message: 'Password reset successfully' });
+  });
 });
 module.exports = router;

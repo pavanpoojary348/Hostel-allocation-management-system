@@ -57,7 +57,7 @@ router.post('/auto-allocate', (req, res) => {
      FROM Students s
      LEFT JOIN Allocations a ON s.student_id = a.student_id
      WHERE a.allocation_id IS NULL
-     ORDER BY s.priority_score DESC`,
+     ORDER BY s.student_id ASC`,
     (err, students) => {
       if (err) return res.status(500).json({ message: err.message });
       if (students.length === 0) return res.json({ message: 'No unallocated students' });
@@ -100,6 +100,7 @@ router.post('/auto-allocate', (req, res) => {
     }
   );
 });
+
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   db.query('SELECT room_id FROM Allocations WHERE allocation_id=?', [id], (err, rows) => {
@@ -111,5 +112,19 @@ router.delete('/:id', (req, res) => {
       res.json({ message: 'Allocation cancelled' });
     });
   });
+});
+router.get('/roommates/:room_id/:student_id', (req, res) => {
+  const { room_id, student_id } = req.params;
+  db.query(
+    `SELECT s.name, s.usn, s.branch, s.semester
+     FROM Allocations a
+     JOIN Students s ON a.student_id = s.student_id
+     WHERE a.room_id = ? AND a.student_id != ?`,
+    [room_id, student_id],
+    (err, rows) => {
+      if (err) return res.status(500).json(err);
+      res.json(rows);
+    }
+  );
 });
 module.exports = router;

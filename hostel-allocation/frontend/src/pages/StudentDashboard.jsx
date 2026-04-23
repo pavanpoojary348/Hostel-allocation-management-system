@@ -6,6 +6,8 @@ export default function StudentDashboard() {
   const [student, setStudent] = useState(null);
   const [allocation, setAllocation] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [roommates, setRoomates] = useState([]);
+  const [waitlistMsg, setWaitlistMsg] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +16,12 @@ export default function StudentDashboard() {
     setStudent(s);
 
     axios.get(`http://localhost:5000/api/allocations/student/${s.student_id}`)
-      .then(res => setAllocation(res.data))
+      .then(res => {
+        setAllocation(res.data);
+        axios.get(`http://localhost:5000/api/allocations/roommates/${res.data.room_id}/${s.student_id}`)
+          .then(r => setRoomates(r.data))
+          .catch(() => setRoomates([]));
+      })
       .catch(() => setAllocation(null));
 
     axios.get(`http://localhost:5000/api/notifications/${s.student_id}`)
@@ -28,6 +35,15 @@ export default function StudentDashboard() {
   const handleLogout = () => {
     localStorage.removeItem('student');
     navigate('/student-login');
+  };
+
+  const handleJoinWaitlist = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/api/waitlist', { student_id: student.student_id });
+      setWaitlistMsg(res.data.message);
+    } catch(err) {
+      setWaitlistMsg(err.response?.data?.message || 'Error joining waitlist');
+    }
   };
 
   if (!student) return null;
@@ -108,9 +124,43 @@ export default function StudentDashboard() {
               </tbody>
             </table>
           ) : (
-            <p style={{color:'#666'}}>No room allocated yet. Please wait for admin to allocate.</p>
+            <div>
+              <p style={{color:'#666'}}>No room allocated yet. Please wait for admin to allocate.</p>
+              <button onClick={handleJoinWaitlist}
+                style={{marginTop:'1rem', background:'#e94560'}}>
+                ⏳ Join Waitlist
+              </button>
+              {waitlistMsg && <p className="success" style={{marginTop:'0.5rem'}}>{waitlistMsg}</p>}
+            </div>
           )}
         </div>
+
+        {allocation && (
+          <div className="card" style={{marginTop:'1.5rem'}}>
+            <h3 style={{marginBottom:'1rem'}}>👥 Roommates</h3>
+            {roommates.length === 0 ? (
+              <p style={{color:'#666'}}>No roommates yet.</p>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th><th>USN</th><th>Branch</th><th>Semester</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {roommates.map((r, i) => (
+                    <tr key={i}>
+                      <td>{r.name}</td>
+                      <td>{r.usn || '-'}</td>
+                      <td>{r.branch}</td>
+                      <td>Sem {r.semester}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

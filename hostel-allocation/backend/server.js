@@ -21,3 +21,5 @@ app.listen(5000, () => {
   console.log('Server running on port 5000');
   console.log('Routes loaded: students, rooms, allocations, notifications');
 });
+const waitlist = require('./routes/waitlist');
+app.use('/api/waitlist', waitlist);

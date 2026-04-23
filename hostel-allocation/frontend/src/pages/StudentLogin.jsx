@@ -28,7 +28,10 @@ export default function StudentLogin() {
           onChange={e => setForm({...form, password:e.target.value})} />
         <button style={{width:'100%'}} onClick={handleLogin}>Login</button>
         {error && <p className="error">{error}</p>}
-        <p style={{marginTop:'1rem', textAlign:'center', fontSize:'13px'}}>
+        <p style={{marginTop:'0.5rem', textAlign:'center', fontSize:'13px'}}>
+          <Link to="/forgot-password" style={{color:'#e94560'}}>Forgot Password?</Link>
+        </p>
+        <p style={{marginTop:'0.5rem', textAlign:'center', fontSize:'13px'}}>
           New student? <Link to="/student-register" style={{color:'#e94560'}}>Register here</Link>
         </p>
         <p style={{marginTop:'0.5rem', textAlign:'center', fontSize:'13px'}}>

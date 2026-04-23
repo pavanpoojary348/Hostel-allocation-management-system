@@ -27,12 +27,12 @@ export default function Students() {
       <table>
         <thead>
           <tr>
-            <th>ID</th><th>Name</th><th>USN</th><th>Gender</th><th>Year</th><th>Department</th><th>Budget</th><th>Priority Score</th>
+            <th>ID</th><th>Name</th><th>USN</th><th>Gender</th><th>Year</th><th>Department</th><th>Budget</th>
           </tr>
         </thead>
         <tbody>
           {filteredStudents.length === 0 ? (
-            <tr><td colSpan="8" style={{textAlign:'center', color:'#666'}}>No students found</td></tr>
+            <tr><td colSpan="7" style={{textAlign:'center', color:'#666'}}>No students found</td></tr>
           ) : (
             filteredStudents.map(s => (
               <tr key={s.student_id}>
@@ -43,7 +43,6 @@ export default function Students() {
                 <td>{s.year}</td>
                 <td>{s.department}</td>
                 <td>₹{s.budget}</td>
-                <td>{s.priority_score}</td>
               </tr>
             ))
           )}
