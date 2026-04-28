@@ -11,8 +11,9 @@ const rooms = require('./routes/rooms');
 const allocations = require('./routes/allocations');
 const notifications = require('./routes/notifications');
 const waitlist = require('./routes/waitlist');
-const year = parseInt(req.body.year);
-const semester = parseInt(req.body.semester);
+
+// ❌ removed invalid req usage
+
 app.use('/api/students', students);
 app.use('/api/rooms', rooms);
 app.use('/api/allocations', allocations);
