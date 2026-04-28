@@ -51,117 +51,157 @@ export default function StudentDashboard() {
   const unread = notifications.filter(n => n.is_read === 0).length;
 
   return (
-    <div style={{minHeight:'100vh', background:'#f0f2f5'}}>
-      <nav style={{background:'#1a1a2e', padding:'1rem 2rem', display:'flex', alignItems:'center'}}>
-        <span style={{color:'#e94560', fontWeight:'bold', fontSize:'20px', marginRight:'auto'}}>
-          🏠 Hostel MS
+  <div className="min-h-screen bg-gray-100">
+
+    {/* NAVBAR */}
+    <div className="bg-indigo-900 text-white px-6 py-4 flex items-center">
+      <h1 className="text-xl font-bold mr-auto">🏠 Hostel MS</h1>
+
+      <span className="mr-4">👋 {student.name}</span>
+
+      {unread > 0 && (
+        <span className="bg-red-500 px-2 py-1 rounded-full text-xs mr-4">
+          {unread}
         </span>
-        <span style={{color:'#fff', marginRight:'1rem'}}>👋 {student.name}</span>
-        {unread > 0 && (
-          <span style={{background:'#e94560', color:'#fff', borderRadius:'50%',
-            padding:'2px 8px', fontSize:'12px', marginRight:'1rem'}}>
-            {unread} new
-          </span>
-        )}
-        <button onClick={() => navigate('/student-profile')}
-          style={{background:'transparent', border:'1px solid #fff', color:'#fff',
-            padding:'5px 16px', borderRadius:'6px', marginRight:'1rem'}}>
-          👤 Profile
-        </button>
-        <button onClick={handleLogout} style={{background:'#e94560', padding:'6px 16px'}}>Logout</button>
-      </nav>
+      )}
 
-      <div className="page">
-        <h2>My Dashboard</h2>
+      <button
+        onClick={() => navigate('/student-profile')}
+        className="mr-3 px-4 py-1 border rounded hover:bg-white hover:text-black transition"
+      >
+        Profile
+      </button>
 
-        {notifications.length > 0 && (
-          <div style={{marginBottom:'1.5rem'}}>
-            {notifications.map(n => (
-              <div key={n.notif_id} style={{
-                background: n.is_read === 0 ? '#e6f9f0' : '#f9f9f9',
-                border: '1px solid #ddd',
-                borderLeft: n.is_read === 0 ? '4px solid #27ae60' : '4px solid #ddd',
-                borderRadius:'8px', padding:'12px 16px', marginBottom:'8px',
-                fontSize:'14px', color:'#333'
-              }}>
-                {n.message}
-                <span style={{float:'right', fontSize:'12px', color:'#999'}}>
-                  {new Date(n.created_at).toLocaleDateString()}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+      <button
+        onClick={handleLogout}
+        className="bg-red-500 px-4 py-1 rounded hover:bg-red-600 transition"
+      >
+        Logout
+      </button>
+    </div>
 
-        <div className="stats" style={{gridTemplateColumns:'repeat(2,1fr)'}}>
-          <div className="stat-card">
-            <h3 style={{fontSize:'1.2rem'}}>{student.usn}</h3>
-            <p>USN</p>
-          </div>
-          <div className="stat-card">
-            <h3 style={{fontSize:'1.2rem'}}>{student.branch}</h3>
-            <p>Branch</p>
-          </div>
-          <div className="stat-card">
-            <h3 style={{fontSize:'1.2rem'}}>Sem {student.semester}</h3>
-            <p>Semester</p>
-          </div>
-          <div className="stat-card">
-            <h3 style={{fontSize:'1.2rem'}}>₹{student.budget}</h3>
-            <p>Budget</p>
-          </div>
-        </div>
+    <div className="p-6 max-w-7xl mx-auto">
 
-        <div className="card">
-          <h3 style={{marginBottom:'1rem'}}>🏠 Room Allocation Status</h3>
-          {allocation ? (
-            <table>
-              <tbody>
-                <tr><td><b>Room</b></td><td>Room {allocation.room_id}</td></tr>
-                <tr><td><b>Floor</b></td><td>Floor {allocation.floor}</td></tr>
-                <tr><td><b>Price</b></td><td>₹{allocation.price}</td></tr>
-                <tr><td><b>Status</b></td><td><span className="badge badge-green">{allocation.status}</span></td></tr>
-              </tbody>
-            </table>
-          ) : (
-            <div>
-              <p style={{color:'#666'}}>No room allocated yet. Please wait for admin to allocate.</p>
-              <button onClick={handleJoinWaitlist}
-                style={{marginTop:'1rem', background:'#e94560'}}>
-                ⏳ Join Waitlist
-              </button>
-              {waitlistMsg && <p className="success" style={{marginTop:'0.5rem'}}>{waitlistMsg}</p>}
+      {/* TITLE */}
+      <h2 className="text-3xl font-bold mb-6">📊 My Dashboard</h2>
+
+      {/* NOTIFICATIONS */}
+      {notifications.length > 0 && (
+        <div className="mb-6 space-y-2">
+          {notifications.map(n => (
+            <div
+              key={n.notif_id}
+              className={`p-4 rounded-xl shadow ${
+                n.is_read === 0
+                  ? "bg-green-50 border-l-4 border-green-500"
+                  : "bg-white"
+              }`}
+            >
+              <p>{n.message}</p>
+              <span className="text-xs text-gray-400">
+                {new Date(n.created_at).toLocaleDateString()}
+              </span>
             </div>
-          )}
+          ))}
+        </div>
+      )}
+
+      {/* STUDENT INFO CARDS */}
+      <div className="grid md:grid-cols-4 gap-6 mb-6">
+
+        <div className="bg-white p-5 rounded-2xl shadow text-center">
+          <p className="text-gray-500 text-sm">USN</p>
+          <h3 className="font-bold">{student.usn}</h3>
         </div>
 
-        {allocation && (
-          <div className="card" style={{marginTop:'1.5rem'}}>
-            <h3 style={{marginBottom:'1rem'}}>👥 Roommates</h3>
-            {roommates.length === 0 ? (
-              <p style={{color:'#666'}}>No roommates yet.</p>
-            ) : (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th><th>USN</th><th>Branch</th><th>Semester</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {roommates.map((r, i) => (
-                    <tr key={i}>
-                      <td>{r.name}</td>
-                      <td>{r.usn || '-'}</td>
-                      <td>{r.branch}</td>
-                      <td>Sem {r.semester}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="bg-white p-5 rounded-2xl shadow text-center">
+          <p className="text-gray-500 text-sm">Branch</p>
+          <h3 className="font-bold">{student.branch}</h3>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl shadow text-center">
+          <p className="text-gray-500 text-sm">Semester</p>
+          <h3 className="font-bold">Sem {student.semester}</h3>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl shadow text-center">
+          <p className="text-gray-500 text-sm">Budget</p>
+          <h3 className="font-bold text-green-600">₹{student.budget}</h3>
+        </div>
+
+      </div>
+
+      {/* ALLOCATION */}
+      <div className="bg-white p-6 rounded-2xl shadow mb-6">
+        <h3 className="text-xl font-semibold mb-4">🏠 Room Allocation</h3>
+
+        {allocation ? (
+          <div className="grid md:grid-cols-4 gap-4 text-center">
+
+            <div>
+              <p className="text-gray-500 text-sm">Room</p>
+              <h4 className="font-bold">Room {allocation.room_id}</h4>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Floor</p>
+              <h4 className="font-bold">{allocation.floor}</h4>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Price</p>
+              <h4 className="font-bold text-green-600">₹{allocation.price}</h4>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Status</p>
+              <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">
+                {allocation.status}
+              </span>
+            </div>
+
+          </div>
+        ) : (
+          <div className="text-center">
+            <p className="text-gray-500 mb-3">
+              No room allocated yet
+            </p>
+
+            <button
+              onClick={handleJoinWaitlist}
+              className="bg-indigo-500 text-white px-5 py-2 rounded-xl hover:bg-indigo-600 transition"
+            >
+              ⏳ Join Waitlist
+            </button>
+
+            {waitlistMsg && (
+              <p className="text-green-600 mt-2">{waitlistMsg}</p>
             )}
           </div>
         )}
       </div>
+
+      {/* ROOMMATES */}
+      {allocation && (
+        <div className="bg-white p-6 rounded-2xl shadow">
+          <h3 className="text-xl font-semibold mb-4">👥 Roommates</h3>
+
+          {roommates.length === 0 ? (
+            <p className="text-gray-500">No roommates yet</p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-4">
+              {roommates.map((r, i) => (
+                <div key={i} className="border p-4 rounded-xl">
+                  <p className="font-semibold">{r.name}</p>
+                  <p className="text-sm text-gray-500">{r.usn}</p>
+                  <p className="text-sm text-gray-500">{r.branch}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
     </div>
-  );
-}
+  </div>
+)};

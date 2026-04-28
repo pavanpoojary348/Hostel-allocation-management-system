@@ -29,88 +29,110 @@ export default function StudentProfile() {
   };
 
   if (!student) return null;
-
+  function Input({ label, value, editing, disabled, onChange }) {
   return (
-    <div style={{minHeight:'100vh', background:'#f0f2f5'}}>
-      <nav style={{background:'#1a1a2e', padding:'1rem 2rem', display:'flex', alignItems:'center'}}>
-        <span style={{color:'#e94560', fontWeight:'bold', fontSize:'20px', marginRight:'auto'}}>
-          🏠 Hostel MS
-        </span>
-        <button onClick={() => navigate('/student-dashboard')}
-          style={{background:'transparent', border:'1px solid #fff', color:'#fff',
-            padding:'5px 16px', borderRadius:'6px', marginRight:'1rem'}}>
-          ← Back
-        </button>
-      </nav>
+    <div>
+      <label className="text-xs text-gray-500">{label}</label>
 
-      <div className="page" style={{maxWidth:'600px'}}>
-        <h2>My Profile</h2>
-        <div className="card">
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem'}}>
-            <h3>Personal Details</h3>
-            <button onClick={() => setEditing(!editing)}
-              style={{background: editing ? '#666' : '#e94560', padding:'6px 16px', fontSize:'13px'}}>
-              {editing ? 'Cancel' : '✏️ Edit'}
-            </button>
-          </div>
-
-          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Full Name</label>
-              <input value={form.name || ''} disabled={!editing}
-                onChange={e => setForm({...form, name:e.target.value})}
-                style={{opacity: editing ? 1 : 0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>USN</label>
-              <input value={form.usn || ''} disabled
-                style={{opacity:0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Mobile</label>
-              <input value={form.mobile || ''} disabled={!editing}
-                onChange={e => setForm({...form, mobile:e.target.value})}
-                style={{opacity: editing ? 1 : 0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Gender</label>
-              <input value={form.gender || ''} disabled
-                style={{opacity:0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Branch</label>
-              <input value={form.branch || ''} disabled={!editing}
-                onChange={e => setForm({...form, branch:e.target.value})}
-                style={{opacity: editing ? 1 : 0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Semester</label>
-              <input value={form.semester || ''} disabled={!editing}
-                onChange={e => setForm({...form, semester:e.target.value})}
-                style={{opacity: editing ? 1 : 0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Year</label>
-              <input value={form.year || ''} disabled={!editing}
-                onChange={e => setForm({...form, year:e.target.value})}
-                style={{opacity: editing ? 1 : 0.7}} />
-            </div>
-            <div>
-              <label style={{fontSize:'12px', color:'#666'}}>Budget</label>
-              <input value={form.budget || ''} disabled
-                style={{opacity:0.7}} />
-            </div>
-          </div>
-
-          {editing && (
-            <button style={{marginTop:'1rem', width:'100%'}} onClick={handleUpdate}>
-              Save Changes
-            </button>
-          )}
-          {msg && <p className={msg.includes('successfully') ? 'success' : 'error'}
-            style={{marginTop:'1rem'}}>{msg}</p>}
-        </div>
-      </div>
+      <input
+        value={value || ''}
+        disabled={disabled || !editing}
+        onChange={e => onChange && onChange(e.target.value)}
+        className={`w-full mt-1 px-4 py-2 rounded-xl border ${
+          disabled || !editing
+            ? 'bg-gray-100 text-gray-500'
+            : 'bg-white'
+        } focus:ring-2 focus:ring-indigo-400 outline-none`}
+      />
     </div>
   );
+}
+
+  return (
+  <div className="min-h-screen bg-gray-100">
+
+    {/* NAVBAR */}
+    <div className="bg-indigo-900 text-white px-6 py-4 flex items-center">
+      <h1 className="text-xl font-bold mr-auto">🏠 Hostel MS</h1>
+
+      <button
+        onClick={() => navigate('/student-dashboard')}
+        className="px-4 py-1 border rounded hover:bg-white hover:text-black transition"
+      >
+        ← Back
+      </button>
+    </div>
+
+    <div className="max-w-3xl mx-auto p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold">👤 My Profile</h2>
+
+        <button
+          onClick={() => setEditing(!editing)}
+          className={`px-4 py-2 rounded-xl text-white transition ${
+            editing
+              ? 'bg-gray-500 hover:bg-gray-600'
+              : 'bg-indigo-500 hover:bg-indigo-600'
+          }`}
+        >
+          {editing ? 'Cancel' : '✏️ Edit'}
+        </button>
+      </div>
+
+      {/* CARD */}
+      <div className="bg-white shadow-xl rounded-2xl p-6 space-y-6">
+
+        {/* GRID */}
+        <div className="grid md:grid-cols-2 gap-5">
+
+          <Input label="Full Name" value={form.name} editing={editing}
+            onChange={v => setForm({...form, name:v})} />
+
+          <Input label="USN" value={form.usn} disabled />
+
+          <Input label="Mobile" value={form.mobile} editing={editing}
+            onChange={v => setForm({...form, mobile:v})} />
+
+          <Input label="Gender" value={form.gender} disabled />
+
+          <Input label="Branch" value={form.branch} editing={editing}
+            onChange={v => setForm({...form, branch:v})} />
+
+          <Input label="Semester" value={form.semester} editing={editing}
+            onChange={v => setForm({...form, semester:v})} />
+
+          <Input label="Year" value={form.year} editing={editing}
+            onChange={v => setForm({...form, year:v})} />
+
+          <Input label="Budget" value={`₹${form.budget}`} disabled />
+
+        </div>
+
+        {/* SAVE BUTTON */}
+        {editing && (
+          <button
+            onClick={handleUpdate}
+            className="w-full bg-indigo-500 text-white py-3 rounded-xl hover:bg-indigo-600 transition"
+          >
+            💾 Save Changes
+          </button>
+        )}
+
+        {/* MESSAGE */}
+        {msg && (
+          <div className={`text-center text-sm font-medium ${
+            msg.includes('success')
+              ? 'text-green-600'
+              : 'text-red-500'
+          }`}>
+            {msg}
+          </div>
+        )}
+
+      </div>
+    </div>
+  </div>
+);
 }

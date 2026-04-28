@@ -1,86 +1,118 @@
 export default function ERDiagram() {
   return (
-    <div className="page">
-      <h2>ER Diagram — Database Structure</h2>
-      <div style={{overflowX:'auto', marginTop:'1rem'}}>
-        <svg width="1000" height="680" style={{background:'white', borderRadius:'12px', padding:'20px'}}>
+    <div className="p-6 max-w-7xl mx-auto">
 
-          {/* Students */}
-          <rect x="20" y="20" width="170" height="210" rx="8" fill="#e6f1fb" stroke="#185FA5" strokeWidth="1.5"/>
-          <rect x="20" y="20" width="170" height="36" rx="8" fill="#185FA5"/>
-          <text x="105" y="43" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Students</text>
-          {['student_id (PK)','name','gender','year','branch','semester','budget','usn','mobile','password'].map((f,i) => (
-            <text key={i} x="32" y={72+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+      <h2 className="text-3xl font-bold mb-4">
+        📊 ER Diagram
+      </h2>
 
-          {/* Preferences */}
-          <rect x="230" y="20" width="170" height="150" rx="8" fill="#e1f5ee" stroke="#0F6E56" strokeWidth="1.5"/>
-          <rect x="230" y="20" width="170" height="36" rx="8" fill="#0F6E56"/>
-          <text x="315" y="43" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Preferences</text>
-          {['pref_id (PK)','student_id (FK)','preferred_floor','preferred_block','max_budget','roommate_pref'].map((f,i) => (
-            <text key={i} x="242" y={72+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+      <div className="bg-white shadow-2xl rounded-2xl p-4 overflow-x-auto">
 
-          {/* Allocations */}
-          <rect x="230" y="210" width="170" height="130" rx="8" fill="#faeeda" stroke="#854F0B" strokeWidth="1.5"/>
-          <rect x="230" y="210" width="170" height="36" rx="8" fill="#854F0B"/>
-          <text x="315" y="233" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Allocations</text>
-          {['allocation_id (PK)','student_id (FK)','room_id (FK)','allocation_date','status'].map((f,i) => (
-            <text key={i} x="242" y={262+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+        <div className="min-w-[1100px] bg-gray-50 p-4 rounded-xl">
 
-          {/* Rooms */}
-          <rect x="440" y="210" width="170" height="180" rx="8" fill="#FAEEDA" stroke="#854F0B" strokeWidth="1.5"/>
-          <rect x="440" y="210" width="170" height="36" rx="8" fill="#BA7517"/>
-          <text x="525" y="233" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Rooms</text>
-          {['room_id (PK)','block_id (FK)','floor','capacity','price','availability_status','room_type','ac_type','washroom'].map((f,i) => (
-            <text key={i} x="452" y={262+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+          {/* ✅ ONLY ONE SVG */}
+          <svg width="1100" height="700">
 
-          {/* Hostel_Block */}
-          <rect x="440" y="20" width="170" height="115" rx="8" fill="#EEEDFE" stroke="#534AB7" strokeWidth="1.5"/>
-          <rect x="440" y="20" width="170" height="36" rx="8" fill="#534AB7"/>
-          <text x="525" y="43" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Hostel_Block</text>
-          {['block_id (PK)','block_name','gender_allowed','total_rooms'].map((f,i) => (
-            <text key={i} x="452" y={72+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+            {/* STUDENTS */}
+            <g>
+              <rect x="40" y="40" width="200" height="230" rx="10" fill="#e6f1fb" stroke="#185FA5" strokeWidth="2"/>
+              <rect x="40" y="40" width="200" height="40" rx="10" fill="#185FA5"/>
+              <text x="140" y="65" textAnchor="middle" fill="white" fontWeight="bold">Students</text>
 
-          {/* Notifications */}
-          <rect x="650" y="20" width="170" height="130" rx="8" fill="#FCEBEB" stroke="#A32D2D" strokeWidth="1.5"/>
-          <rect x="650" y="20" width="170" height="36" rx="8" fill="#A32D2D"/>
-          <text x="735" y="43" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Notifications</text>
-          {['notif_id (PK)','student_id (FK)','message','is_read','created_at'].map((f,i) => (
-            <text key={i} x="662" y={72+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+              {['student_id (PK)','name','gender','year','branch','semester','budget','usn','mobile','password']
+                .map((f,i)=>(
+                  <text key={i} x="55" y={95 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
 
-          {/* Waitlist */}
-          <rect x="650" y="200" width="170" height="115" rx="8" fill="#e1f5ee" stroke="#0F6E56" strokeWidth="1.5"/>
-          <rect x="650" y="200" width="170" height="36" rx="8" fill="#0F6E56"/>
-          <text x="735" y="223" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">Waitlist</text>
-          {['waitlist_id (PK)','student_id (FK)','requested_at','status'].map((f,i) => (
-            <text key={i} x="662" y={252+i*16} fontSize="11" fill="#1a1a2e">{f}</text>
-          ))}
+            {/* PREFERENCES */}
+            <g>
+              <rect x="300" y="40" width="200" height="170" rx="10" fill="#e1f5ee" stroke="#0F6E56" strokeWidth="2"/>
+              <rect x="300" y="40" width="200" height="40" rx="10" fill="#0F6E56"/>
+              <text x="400" y="65" textAnchor="middle" fill="white" fontWeight="bold">Preferences</text>
 
-          {/* Relationships */}
-          <line x1="190" y1="80" x2="230" y2="80" stroke="#0F6E56" strokeWidth="1.5" strokeDasharray="4"/>
-          <text x="205" y="75" fontSize="10" fill="#0F6E56">1:1</text>
+              {['pref_id (PK)','student_id (FK)','preferred_floor','preferred_block','max_budget','roommate_pref']
+                .map((f,i)=>(
+                  <text key={i} x="315" y={95 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
 
-          <line x1="190" y1="200" x2="230" y2="260" stroke="#854F0B" strokeWidth="1.5" strokeDasharray="4"/>
-          <text x="195" y="240" fontSize="10" fill="#854F0B">1:1</text>
+            {/* HOSTEL BLOCK */}
+            <g>
+              <rect x="580" y="40" width="200" height="140" rx="10" fill="#eeedfe" stroke="#534AB7" strokeWidth="2"/>
+              <rect x="580" y="40" width="200" height="40" rx="10" fill="#534AB7"/>
+              <text x="680" y="65" textAnchor="middle" fill="white" fontWeight="bold">Hostel_Block</text>
 
-          <line x1="400" y1="270" x2="440" y2="270" stroke="#854F0B" strokeWidth="1.5" strokeDasharray="4"/>
-          <text x="412" y="265" fontSize="10" fill="#854F0B">N:1</text>
+              {['block_id (PK)','block_name','gender_allowed','total_rooms']
+                .map((f,i)=>(
+                  <text key={i} x="595" y={95 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
 
-          <line x1="525" y1="210" x2="525" y2="135" stroke="#534AB7" strokeWidth="1.5" strokeDasharray="4"/>
-          <text x="530" y="178" fontSize="10" fill="#534AB7">N:1</text>
+            {/* NOTIFICATIONS */}
+            <g>
+              <rect x="860" y="40" width="200" height="150" rx="10" fill="#fdeaea" stroke="#a32d2d" strokeWidth="2"/>
+              <rect x="860" y="40" width="200" height="40" rx="10" fill="#a32d2d"/>
+              <text x="960" y="65" textAnchor="middle" fill="white" fontWeight="bold">Notifications</text>
 
-          <line x1="105" y1="20" x2="735" y2="20" stroke="#A32D2D" strokeWidth="1" strokeDasharray="4"/>
-          <text x="400" y="15" fontSize="10" fill="#A32D2D">1:N</text>
+              {['notif_id (PK)','student_id (FK)','message','is_read','created_at']
+                .map((f,i)=>(
+                  <text key={i} x="875" y={95 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
 
-          <line x1="190" y1="150" x2="650" y2="240" stroke="#0F6E56" strokeWidth="1" strokeDasharray="4"/>
-          <text x="390" y="185" fontSize="10" fill="#0F6E56">1:N</text>
+            {/* ALLOCATIONS */}
+            <g>
+              <rect x="300" y="300" width="200" height="140" rx="10" fill="#faeeda" stroke="#854F0B" strokeWidth="2"/>
+              <rect x="300" y="300" width="200" height="40" rx="10" fill="#854F0B"/>
+              <text x="400" y="325" textAnchor="middle" fill="white" fontWeight="bold">Allocations</text>
 
-        </svg>
+              {['allocation_id (PK)','student_id (FK)','room_id (FK)','allocation_date','status']
+                .map((f,i)=>(
+                  <text key={i} x="315" y={355 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
+
+            {/* ROOMS */}
+            <g>
+              <rect x="580" y="300" width="220" height="200" rx="10" fill="#faeeda" stroke="#ba7517" strokeWidth="2"/>
+              <rect x="580" y="300" width="220" height="40" rx="10" fill="#ba7517"/>
+              <text x="690" y="325" textAnchor="middle" fill="white" fontWeight="bold">Rooms</text>
+
+              {['room_id (PK)','block_id (FK)','floor','capacity','price','availability_status','room_type','ac_type','washroom']
+                .map((f,i)=>(
+                  <text key={i} x="595" y={355 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
+
+            {/* WAITLIST */}
+            <g>
+              <rect x="860" y="300" width="200" height="140" rx="10" fill="#e1f5ee" stroke="#0F6E56" strokeWidth="2"/>
+              <rect x="860" y="300" width="200" height="40" rx="10" fill="#0F6E56"/>
+              <text x="960" y="325" textAnchor="middle" fill="white" fontWeight="bold">Waitlist</text>
+
+              {['waitlist_id (PK)','student_id (FK)','requested_at','status']
+                .map((f,i)=>(
+                  <text key={i} x="875" y={355 + i*16} fontSize="12">{f}</text>
+                ))}
+            </g>
+
+            {/* RELATION LINES */}
+            <line x1="240" y1="120" x2="300" y2="120" stroke="gray" strokeDasharray="4"/>
+            <text x="260" y="110" fontSize="12">1:1</text>
+
+            <line x1="240" y1="220" x2="300" y2="340" stroke="gray" strokeDasharray="4"/>
+            <text x="250" y="300" fontSize="12">1:1</text>
+
+            <line x1="500" y1="360" x2="580" y2="360" stroke="gray" strokeDasharray="4"/>
+            <text x="530" y="350" fontSize="12">N:1</text>
+
+            <line x1="690" y1="300" x2="690" y2="180" stroke="gray" strokeDasharray="4"/>
+            <text x="700" y="230" fontSize="12">N:1</text>
+
+          </svg>
+
+        </div>
       </div>
     </div>
   );
